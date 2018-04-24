@@ -47,4 +47,36 @@ class User extends Authenticatable implements JWTSubject
     {
         return ['email' => $this->email];
     }
+
+    /**
+     * Get the categories for the user
+     */
+    public function category()
+    {
+        return $this->hasMany('App\Models\Category');
+    }
+
+    /**
+     * Get the accounts for the user
+     */
+    public function accounts()
+    {
+        return $this->hasMany('App\Models\Account');
+    }
+
+    /**
+     * Get the transactions for the user
+     */
+    public function transactions()
+    {
+        return $this->hasMany('App\Models\Transaction');
+    }
+
+    /**
+     * Get the payees for the user
+     */
+    public function payees()
+    {
+        return $this->hasMany('App\Models\Payee');
+    }
 }

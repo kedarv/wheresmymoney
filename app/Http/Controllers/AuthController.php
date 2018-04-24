@@ -59,7 +59,7 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return $this->respondWithToken($token);;
+        return $this->respondWithToken($token);
     } 
 
     /**
