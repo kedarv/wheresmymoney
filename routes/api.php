@@ -16,3 +16,15 @@ Route::group(['prefix' => 'auth', 'middleware' => 'api'], function () {
 	Route::post('login', 'AuthController@login');
 	Route::post('create', 'AuthController@create');
 });
+
+Route::group(['prefix' => 'account', 'middleware' => 'jwt.auth'], function () {
+	Route::post('create', 'AccountController@create');
+	Route::get('{account}', 'AccountController@getAccount');
+	Route::get('/', 'AccountController@getAllAccounts');
+});
+
+Route::group(['prefix' => 'category', 'middleware' => 'jwt.auth'], function () {
+	Route::post('create', 'CategoryController@create');
+	Route::get('{category}', 'CategoryController@getCategory');
+	Route::get('/', 'CategoryController@getAllCategories');	
+});
