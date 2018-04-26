@@ -28,3 +28,15 @@ Route::group(['prefix' => 'category', 'middleware' => 'jwt.auth'], function () {
 	Route::get('{category}', 'CategoryController@getCategory');
 	Route::get('/', 'CategoryController@getAllCategories');	
 });
+
+Route::group(['prefix' => 'payee', 'middleware' => 'jwt.auth'], function () {
+	Route::post('create', 'PayeeController@create');
+	Route::get('{payee}', 'PayeeController@getPayee');
+	Route::get('/', 'PayeeController@getAllPayees');	
+});
+
+Route::group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function () {
+	Route::post('create', 'TransactionsController@create');
+	Route::get('{transaction}', 'TransactionsController@getTransactionById');
+	Route::get('/', 'PayeeController@getAllTransactions');
+});

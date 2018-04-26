@@ -19,8 +19,9 @@ class CreateTransactionsTable extends Migration
             $table->integer('account_id')->unsigned();
             $table->integer('category_id')->unsigned();
             $table->integer('payee_id')->unsigned();
-            $table->string('name');
-            $table->float('amount', 8, 2);
+            $table->string('memo')->nullable();
+            $table->float('outflow', 8, 2)->default(0);
+            $table->float('inflow', 8, 2)->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('account_id')->references('id')->on('accounts');
