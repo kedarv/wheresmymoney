@@ -15,15 +15,13 @@ class TransactionsController extends Controller
 {
 	public function create(Request $request)
 	{
+		$user_id = Auth::user()->id;
         $validator = Validator::make($request->all(), [
-            'account_id' => 'required',
-            'category_id' => 'required',
-            'payee_id' => 'required',
-            'amount' => 'required|numeric',
-            'outflow' => 
-            'inflow' =>
-            // TODO: Write custom validators for outflow/inflow boolean sometimes
-            // TODO: Write custom validator to check existence of above attributes for specified user (or maybe use exists query)
+            'account_id' => 'required|exists_for_user:accounts,id,user_id,' . $user_id,
+            'category_id' => 'required|exists_for_user:category,id,user_id,' . $user_id,
+            'payee_id' => 'required||exists_for_user:payees,id,user_id,' . $user_id,
+            'outflow' => 'required|numeric',
+            'inflow' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -36,21 +34,20 @@ class TransactionsController extends Controller
 		$transaction->category_id = $request->category_id;
 		$transaction->payee_id = $request->payee_id;
 		$transaction->memo = $request->memo;
-		$transaction->type = $request->type;
 		$transaction->outflow = $request->outflow;
 		$transaction->inflow = $request->inflow;
 		$transaction->save();
 		return $transaction;
 	}
 
-	public function getCategory(Category $category) {
-		if($category->user_id == Auth::user()->id) {
-			return $category;
+	public function getTransactionById(Transaction $transaction) {
+		if($transaction->user_id == Auth::user()->id) {
+			return $transaction;
 		}
 		return ['error' => 'Unauthorized'];
 	}
 
-	public function getAllCategories() {
-		return Auth::user()->category;
+	public function getAllTransactions() {
+		return Auth::user()->transactions;
 	}
 }

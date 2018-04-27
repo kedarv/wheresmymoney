@@ -38,5 +38,5 @@ Route::group(['prefix' => 'payee', 'middleware' => 'jwt.auth'], function () {
 Route::group(['prefix' => 'transactions', 'middleware' => 'jwt.auth'], function () {
 	Route::post('create', 'TransactionsController@create');
 	Route::get('{transaction}', 'TransactionsController@getTransactionById');
-	Route::get('/', 'PayeeController@getAllTransactions');
+	Route::get('/', 'TransactionsController@getAllTransactions');
 });
