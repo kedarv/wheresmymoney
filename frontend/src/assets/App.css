@@ -1,0 +1,10 @@
+.container-raised {
+    margin: 1em auto;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .28571429rem;
+    display: block;
+    background-color: #fff;
+    padding: 30px;
+    font-size: 1.14285714rem;
+    line-height: 1.5;    
+}

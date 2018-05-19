@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import apiService from '../actions/index.js';
 import { logoutUser } from '../actions/users';
-import FontAwesome from 'react-fontawesome';
 import Body from './Body';
+import TransactionForm from './TransactionForm';
+import { Table } from 'reactstrap';
 
 export class Dashboard extends Component {
 
@@ -16,16 +17,15 @@ export class Dashboard extends Component {
 
     componentDidMount() {
         this.setState({ isLoading: true });
-    	apiService('account', {
+    	apiService('user/dashboard', {
             method: 'GET'
         }).then((res) => res.json())
             .then((json) => {
-                let accounts = json.map(account => 
+                let accounts = json.accounts.map(account => 
                     <div key={account.id}><b>{account.name}</b>  ${account.balance}</div>
                 )
-                this.setState({ accounts:accounts, isLoading: false });
+                this.setState({ accounts:accounts, isLoading: false, 'net_worth': json.net_worth });
         })
-
     }
 
 	handleLogout = (e) => {
@@ -39,14 +39,14 @@ export class Dashboard extends Component {
     render () {
         return (
             <Body>
-            <div style={{height: '100%'}}>
-            we're authed!
-           {this.state.accounts}
-           <hr/>
-                        <li><a href="./dashboard/settings">link to something</a></li>
-                        <li><a href="#" onClick={this.handleLogout}>logout</a></li>
-
-            </div>
+                <h2>Dashboard</h2>
+                <hr/>
+                Net Worth: {this.state.net_worth}<br/>
+                <b>Accounts</b><br/>
+                {this.state.accounts}
+                <TransactionForm/>
+                <hr/>
+                <a href="#" onClick={this.handleLogout}>logout</a>
             </Body>
         );
     }

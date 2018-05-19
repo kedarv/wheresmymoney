@@ -79,4 +79,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany('App\Models\Payee');
     }
+
+    public function net_worth() {
+        return $this->accounts->sum('balance');
+    }
 }

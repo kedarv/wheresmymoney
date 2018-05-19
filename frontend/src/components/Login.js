@@ -39,6 +39,8 @@ export class Login extends Component {
     render () {
         return (
             <Body>
+                <h2>Login</h2>
+                <hr/>            
                 <ErrorMsg authError={this.state.authError} errors={this.state.errors}/>
                 <Form onSubmit={this.handleLogin}>
                     <FormGroup>

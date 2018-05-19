@@ -39,6 +39,8 @@ export class RegisterUser extends Component {
 	render () {
 		return (
 			<Body>
+                <h2>Register</h2>
+                <hr/>
                 <ErrorMsg authError={this.state.authError} errors={this.state.errors}/>
                 <Form onSubmit={this.handleRegister}>
                     <FormGroup>

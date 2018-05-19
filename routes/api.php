@@ -17,6 +17,10 @@ Route::group(['prefix' => 'auth', 'middleware' => 'api'], function () {
 	Route::post('create', 'AuthController@create');
 });
 
+Route::group(['prefix' => 'user', 'middleware' => 'jwt.auth'], function () {
+	Route::get('dashboard', 'UserController@getDashboard');
+});
+
 Route::group(['prefix' => 'account', 'middleware' => 'jwt.auth'], function () {
 	Route::post('create', 'AccountController@create');
 	Route::get('{account}', 'AccountController@getAccount');
