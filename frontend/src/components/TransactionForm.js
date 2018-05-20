@@ -4,26 +4,26 @@ import apiService from '../actions/index.js';
 import { withRouter, Link} from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
+import Select from 'react-select';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import '../formstyle.css';
 
-const createOption = (label: string) => ({
+const createOption = (label: string, value) => ({
   label,
-  value: label.toLowerCase().replace(/\W/g, ''),
+  value: value.toString(),
 });
-
-const defaultOptions = [
-  createOption('One'),
-  createOption('Two'),
-  createOption('Three'),
-];
 
 export class TransactionForm extends Component {
   constructor (props) {
     super(props);
     this.state = { 
       errors: null,
-      isLoading: false,
+      isLoadingPayee: false,
+      isLoadingCategory: false,
       payees: null,
-      value: undefined,
+      categories: null,
+      accounts: null,
+      date: undefined,      
     };
   }
 
@@ -33,15 +33,24 @@ export class TransactionForm extends Component {
     }).then((res) => res.json())
         .then((json) => {
           this.setState({ payees: this.populateOptions(json) });
+          console.log(this.state.payees);
         })
+    apiService('category', {
+      method: 'GET'
+    }).then((res) => res.json())
+        .then((json) => {
+          this.setState({ categories: this.populateOptions(json) });
+        })
+    apiService('account', {
+      method: 'GET'
+    }).then((res) => res.json())
+        .then((json) => {
+          this.setState({ accounts: this.populateOptions(json) });
+        })        
   }
 
-  handleChange = (newValue: any, actionMeta: any) => {
-    this.setState({ value: newValue });
-  };
-
-  handleCreate = (inputValue: any) => {
-    this.setState({ isLoading: true });
+  handleCreatePayee = (inputValue: any) => {
+    this.setState({ isLoadingPayee: true });
     let form = new FormData();
     form.append('name', inputValue); 
     return apiService('payee/create', {
@@ -50,11 +59,30 @@ export class TransactionForm extends Component {
     }).then((res) => res.json())
       .then((json) => {
         const { options } = this.state;
-        const newOption = createOption(inputValue);
+        const newOption = createOption(inputValue, json.id);
         this.setState({
-          isLoading: false,
+          isLoadingPayee: false,
           payees: [...this.state.payees, newOption],
-          value: newOption,
+          payee_value: newOption,
+        });  
+      })
+  };
+
+  handleCreateCategory = (inputValue: any) => {
+    this.setState({ isLoadingCategory: true });
+    let form = new FormData();
+    form.append('name', inputValue); 
+    return apiService('category/create', {
+      method: 'POST',
+      body: form
+    }).then((res) => res.json())
+      .then((json) => {
+        const { options } = this.state;
+        const newOption = createOption(inputValue, json.id);
+        this.setState({
+          isLoadingCategory: false,
+          categories: [...this.state.categories, newOption],
+          category_value: newOption,
         });  
       })
   };
@@ -62,25 +90,25 @@ export class TransactionForm extends Component {
   handleCreateTransaction = (data) => {
     data.preventDefault();
     let form = new FormData();
-        // form.append('email', data.target.email.value);
-        // form.append('password', data.target.password.value); 
-        // return apiService('auth/create', {
-        //     method: 'POST',
-        //     body: form
-        // }).then((res) => res.json())
-        //     .then((json) => {
-        //         if (json.access_token == 'success') {
-        //             this.props.registerUser(json.access_token);
-        //         }
-        //         else{
-        //             this.setState({authError:true, errors:json});
-        //         }
-        //     })
+    form.append('payee_id', data.target.payee.value);
+    form.append('category_id', data.target.category.value);
+    form.append('account_id', data.target.account.value);
+    form.append('outflow', data.target.outflow.value);
+    form.append('inflow', data.target.inflow.value);
+    form.append('date', this.state.date);
+
+        return apiService('transactions/create', {
+            method: 'POST',
+            body: form
+        }).then((res) => res.json())
+            .then((json) => {
+               console.log(json)
+            })
   }
 
   populateOptions(options) {
     return options.map((option) => (
-      createOption(option.name)
+      createOption(option.name, option.id)
     ));
   }
 
@@ -88,28 +116,57 @@ export class TransactionForm extends Component {
     return (
       <div>
         <ErrorMsg authError={this.state.authError} errors={this.state.errors}/>
-          <Form onSubmit={this.handleRegister}>
+          <Form onSubmit={this.handleCreateTransaction}>
             <FormGroup>
-              <Label for="inputEmail">Payee</Label>
+              <Label for="inputDate">Date</Label>
+              <DayPickerInput modifiersStyles='form-control' onDayChange={day => this.state.date = day.toLocaleDateString()}/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="inputPayee">Payee</Label>
                 {this.state.payees === null ? <div>Loading</div> :  
                   <CreatableSelect
+                    name="payee"
+                    id="inputPayee"
                     isClearable
-                    isDisabled={this.state.isLoading}
-                    isLoading={this.state.isLoading}
-                    onChange={this.handleChange}
-                    onCreateOption={this.handleCreate}
+                    isDisabled={this.state.isLoadingPayee}
+                    isLoading={this.state.isLoadingPayee}
+                    onCreateOption={this.handleCreatePayee}
                     options={this.state.payees}
-                    value={this.state.value}
+                    value={this.state.payee_value}
                   />
                 }
               </FormGroup>
+            <FormGroup>
+              <Label for="inputCategory">Category</Label>
+                {this.state.categories === null ? <div>Loading</div> :  
+                  <CreatableSelect
+                    name="category"
+                    id="inputCategory"
+                    isClearable={false}
+                    isDisabled={this.state.isLoadingCategory}
+                    isLoading={this.state.isLoadingCategory}
+                    onCreateOption={this.handleCreateCategory}
+                    options={this.state.categories}
+                    value={this.state.category_value}
+                  />
+                }
+              </FormGroup>              
               <FormGroup>
-                <Label for="inputPassword">Outflow</Label>
-                <Input type="password" name="password" id="inputPassword" placeholder="outflow" />
+              <Label for="inputCategory">Account</Label>
+                {this.state.accounts === null ? <div>Loading</div> :  
+                  <Select
+                    name="account"
+                    options={this.state.accounts}
+                  />
+                }
+              </FormGroup>              
+              <FormGroup>
+                <Label for="inputOutflow">Outflow</Label>
+                <Input type="text" name="outflow" id="inputOutflow" placeholder="outflow" />
               </FormGroup>
               <FormGroup>
-                <Label for="inputPasswordVerify">Inflow</Label>
-                <Input type="password" name="password-verify" id="inputPasswordVerify" placeholder="inflow" />
+                <Label for="inputInflow">Inflow</Label>
+                <Input type="text" name="inflow" id="inputInflow" placeholder="inflow" />
               </FormGroup>
               <Button type="submit" color="primary">Save</Button>
           </Form>         

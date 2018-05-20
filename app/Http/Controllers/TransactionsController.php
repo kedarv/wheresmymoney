@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\Payee;
 use App\Models\Account;
 use Auth;
+use Carbon\Carbon;
 
 class TransactionsController extends Controller
 {
@@ -19,9 +20,10 @@ class TransactionsController extends Controller
         $validator = Validator::make($request->all(), [
             'account_id' => 'required|exists_for_user:accounts,id,user_id,' . $user_id,
             'category_id' => 'required|exists_for_user:category,id,user_id,' . $user_id,
-            'payee_id' => 'required||exists_for_user:payees,id,user_id,' . $user_id,
+            'payee_id' => 'required|exists_for_user:payees,id,user_id,' . $user_id,
             'outflow' => 'required|numeric',
             'inflow' => 'required|numeric',
+            'date' => 'required|date'
         ]);
 
         if ($validator->fails()) {
@@ -36,8 +38,9 @@ class TransactionsController extends Controller
 		$transaction->memo = $request->memo;
 		$transaction->outflow = $request->outflow;
 		$transaction->inflow = $request->inflow;
+		$transaction->date = new Carbon($request->date);
 		$transaction->save();
-		return $transaction;
+		return Transaction::find($transaction->id);
 	}
 
 	public function getTransactionById(Transaction $transaction) {

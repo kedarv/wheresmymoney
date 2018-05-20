@@ -21,14 +21,16 @@ export class RegisterUser extends Component {
     	data.preventDefault();
     	let form = new FormData();
     	form.append('email', data.target.email.value);
-    	form.append('password', data.target.password.value); 
+    	form.append('password', data.target.password.value);
+        form.append('password_confirm', data.target.password_confirm.value); 
     	return apiService('auth/create', {
     		method: 'POST',
     		body: form
     	}).then((res) => res.json())
     		.then((json) => {
-    			if (json.access_token == 'success') {
+    			if (json.access_token) {
     				this.props.registerUser(json.access_token);
+                    this.props.history.push('/');                    
     			}
 				else{
 					this.setState({authError:true, errors:json});
@@ -53,7 +55,7 @@ export class RegisterUser extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label for="inputPasswordVerify">Verify Password</Label>
-                        <Input type="password" name="password-verify" id="inputPasswordVerify" placeholder="Verify Password" />
+                        <Input type="password" name="password_confirm" id="inputPasswordVerify" placeholder="Verify Password" />
                     </FormGroup>
                     <Button type="submit" color="primary">Register</Button>
                 </Form>			
@@ -86,7 +88,7 @@ function mapStateToProps (state) {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	registerUser: (token) => {
-	        dispatch(registerUser(token));
+	   dispatch(registerUser(token));
 	},
 	onRegisterAccess() {
 		dispatch(registerAccessToken());

@@ -22,6 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->string('memo')->nullable();
             $table->float('outflow', 8, 2)->default(0);
             $table->float('inflow', 8, 2)->default(0);
+            $table->date('date');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('account_id')->references('id')->on('accounts');
