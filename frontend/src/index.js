@@ -10,6 +10,7 @@ import { loginFromJWT, registerAccessToken } from './actions/users';
 import ReduxThunk from 'redux-thunk';
 import apiService from './actions/index.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
 const store = configureStore();
 

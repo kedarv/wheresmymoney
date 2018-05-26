@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import apiService from '../actions/index.js';
-import { logoutUser } from '../actions/users';
 import Body from './Body';
 import TransactionForm from './TransactionForm';
-import { Table } from 'reactstrap';
+import { Container, Row, Col, Table, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
-export class Dashboard extends Component {
+export default class Dashboard extends Component {
 
 	constructor (props) {
         super(props);
@@ -22,46 +20,38 @@ export class Dashboard extends Component {
         }).then((res) => res.json())
             .then((json) => {
                 let accounts = json.accounts.map(account => 
-                    <div key={account.id}><b>{account.name}</b>  ${account.balance}</div>
+                    <ListGroupItem className="justify-content-between clearfix" key={account.id}>
+                        <b className="float-left">{account.name}</b>
+                        <span className="money positive float-right">${account.balance}</span>
+                    </ListGroupItem>
                 )
                 this.setState({ accounts:accounts, isLoading: false, 'net_worth': json.net_worth });
         })
     }
 
-	handleLogout = (e) => {
-		e.preventDefault();
-		this.props.logoutUser();
-		this.props.history.push('/login');
-	}
-
-	
-
     render () {
         return (
             <Body>
-                <h2>Dashboard</h2>
-                <hr/>
-                Net Worth: {this.state.net_worth}<br/>
-                <b>Accounts</b><br/>
-                {this.state.accounts}
-                <TransactionForm/>
-                <hr/>
-                <a href="#" onClick={this.handleLogout}>logout</a>
+                <Container>
+                    <Row>
+                        <Col lg="4" sm="12" className="mb-4">
+                            <Row>
+                                <Col xs="6"><span className="section_header">Net Worth:</span></Col>
+                                <Col xs="6"><div className="text-right money positive header">${this.state.net_worth}</div></Col>
+                            </Row>
+                            <hr/>
+                            <ListGroup>
+                            {this.state.accounts}
+                            </ListGroup>
+                        </Col>
+                        <Col lg="8" sm="12">
+                            <span className="section_header">New Transaction</span>
+                            <hr/>
+                            <TransactionForm/>
+                        </Col>
+                    </Row>
+                </Container>
             </Body>
         );
     }
 }
-
-function mapStateToProps (state) {
-    return {
-        user: state.user
-    };
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-	logoutUser: () => {
-	        dispatch(logoutUser());
-	}
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

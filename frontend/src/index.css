@@ -1,5 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:400,700');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.money {
+	font-family: 'Roboto Mono', monospace;
+	color: #686869;
+}
+
+.header {
+	font-size: 1.2em;
+}
+.positive {
+	color: #21ba45
+}
+
+.section_header {
+	font-size: 1.2em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    padding-left: .15em;
 }

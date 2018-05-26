@@ -13,11 +13,13 @@ export class Login extends Component {
         this.state = {
             redirectToReferrer: false,
             authError:false,
-            errors: null
+            errors: null,
+            isLoading: false,
         };
     }
 
     handleLogin = (data) => {
+        this.setState({ isLoading: true });
         data.preventDefault();
         let form = new FormData();
         form.append('email', data.target.email.value);
@@ -27,6 +29,7 @@ export class Login extends Component {
             body: form
         }).then((res) => res.json())
             .then((json) => {
+                this.setState({ isLoading: false });
                 if (json.access_token) {
                     this.props.onLogin(json.access_token);
                     this.props.history.push('/');
@@ -39,8 +42,9 @@ export class Login extends Component {
     render () {
         return (
             <Body>
-                <h2>Login</h2>
+                <h2 className="section_header">Login</h2>
                 <hr/>            
+                {this.state.isLoading && <div>Loading</div>}
                 <ErrorMsg authError={this.state.authError} errors={this.state.errors}/>
                 <Form onSubmit={this.handleLogin}>
                     <FormGroup>
