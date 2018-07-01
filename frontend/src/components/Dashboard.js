@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import apiService from '../actions/index.js';
 import Body from './Body';
 import TransactionForm from './TransactionForm';
+import Budget from './Budget';
+import Transactions from './Transactions';
 import { Container, Row, Col, Table, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class Dashboard extends Component {
@@ -50,6 +52,9 @@ export default class Dashboard extends Component {
                             <TransactionForm/>
                         </Col>
                     </Row>
+                    <Budget/>
+                    <hr/>
+                    <Transactions />
                 </Container>
             </Body>
         );

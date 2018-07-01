@@ -18,10 +18,138 @@ body {
 .positive {
 	color: #21ba45
 }
+.negative {
+    color: #db2828;
+}
 
 .section_header {
 	font-size: 1.2em;
     line-height: 1.5;
     text-transform: uppercase;
     padding-left: .15em;
+}
+
+.SortableList {
+    position: relative;
+    z-index: 0;
+    background-color: #F3F3F3;
+    border: 1px solid #EFEFEF;
+    border-radius: 3px;
+    outline: none;
+    width: 100%;
+    height: 600px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #E0E0E0;
+    list-style: none;
+    padding: 0;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+.Header {
+    padding: 10px 20px;
+    margin: 0;
+    background: #f9f9f9;
+    border-bottom: 1px solid #efefef;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #333;
+}
+.SortableItem {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    background-color: #FFF;
+    border-bottom: 1px solid #EFEFEF;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #333;
+    font-weight: 500;
+}
+.SortableHelper {
+    box-shadow: 0 5px 5px -5px rgba(0, 0, 0, 0.2), 0 -5px 5px -5px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: row-resize;
+}
+
+.GridRow {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+.GridColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.LeftSideGridContainer {
+  flex: 0 0 50px;
+}
+
+.BodyGrid {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+}
+
+.evenRow,
+.oddRow {
+  border-bottom: 1px solid #e0e0e0;
+}
+.oddRow {
+  background-color: #fafafa;
+}
+
+.cell,
+.headerCell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 .5em;
+}
+.cell {
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.headerCell {
+  font-weight: bold;
+  border-right: 1px solid #e0e0e0;
+}
+.centeredCell {
+  align-items: center;
+  text-align: center;
+}
+
+.letterCell {
+  font-size: 1.5em;
+  color: #fff;
+  text-align: center;
+}
+
+.noCells {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  color: #bdbdbd;
 }

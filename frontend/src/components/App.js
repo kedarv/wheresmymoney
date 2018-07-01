@@ -3,6 +3,7 @@ import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
+import Budget from './Budget';
 import { connect } from 'react-redux';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
@@ -47,6 +48,7 @@ const App = () => (
   <div>
     <Switch>
       <UserRoute exact path="/" component={Dashboard}/>
+      <UserRoute path="/budget" component={Budget}/>
       <AuthRoute path="/login" component={Login}/>
       <AuthRoute path="/register" component={Register}/>
       <Redirect from="*" to="/"/>

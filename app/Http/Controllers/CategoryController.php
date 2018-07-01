@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Transaction;
 use Auth;
+use Carbon\Carbon;
+use DB;
 
 class CategoryController extends Controller
 {
 	public function create(Request $request)
 	{
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:category,name,NULL,id,user_id,'.Auth::user()->id
+            'name' => 'required',
+            'amount' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -23,6 +27,7 @@ class CategoryController extends Controller
 		$category = new Category;
 		$category->user_id = Auth::user()->id;
 		$category->name = $request->name;
+		$category->amount = $request->amount;
 		$category->save();
 		return $category;
 	}
@@ -34,7 +39,30 @@ class CategoryController extends Controller
 		return ['error' => 'Unauthorized'];
 	}
 
+	public function getCalculatedCategories(Request $request) {
+		$categories = $this->categories_given_month_year($request->month, $request->year);
+		foreach($categories as $category) {
+			$calculated = Transaction::whereBetween('date',[Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+								->where('category_id', $category->id)->value(DB::raw("SUM(inflow) - SUM(outflow)"));						
+			$category->remaining_calculated = $category->amount + $calculated;
+		}
+		return $categories;
+	}
+
 	public function getAllCategories() {
-		return Auth::user()->category;
+		return Category::where('user_id', Auth::user()->id)->where('internal', 0)->get();
+	}
+
+	public function getCategoriesForMonth(Request $request) {
+		return $this->categories_given_month_year($request->month, $request->year);
+	}
+
+	function categories_given_month_year($month, $year) {
+		$start = Carbon::create($year, $month)->startOfMonth();
+		$end = $start->copy()->endOfMonth();
+		return Category::where('user_id', Auth::user()->id)
+			->where('internal', 0)
+			->whereBetween('created_at', [$start, $end])
+			->get();		
 	}
 }

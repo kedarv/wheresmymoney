@@ -28,12 +28,12 @@ export class RegisterUser extends Component {
     		body: form
     	}).then((res) => res.json())
     		.then((json) => {
-    			if (json.access_token) {
+    			if (json.data && json.data.access_token) {
     				this.props.registerUser(json.access_token);
                     this.props.history.push('/');                    
     			}
 				else{
-					this.setState({authError:true, errors:json});
+					this.setState({authError:true, errors:json.errors});
 				}
     		})
     }

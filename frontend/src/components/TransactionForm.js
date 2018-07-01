@@ -28,13 +28,14 @@ export class TransactionForm extends Component {
   }
 
   componentDidMount() {
+    let d = new Date();
     apiService('payee', {
       method: 'GET'
     }).then((res) => res.json())
         .then((json) => {
           this.setState({ payees: this.populateOptions(json) });
         })
-    apiService('category', {
+    apiService('category/current/' + (d.getMonth()+1) + '/' + d.getFullYear(), {
       method: 'GET'
     }).then((res) => res.json())
         .then((json) => {
@@ -69,12 +70,14 @@ export class TransactionForm extends Component {
   handleCreateCategory = (inputValue: any) => {
     this.setState({ isLoadingCategory: true });
     let form = new FormData();
-    form.append('name', inputValue); 
+    form.append('name', inputValue);
+    form.append('amount', 0);
     return apiService('category/create', {
       method: 'POST',
       body: form
     }).then((res) => res.json())
       .then((json) => {
+        const { options } = this.state;
         const newOption = createOption(inputValue, json.id);
         this.setState({
           isLoadingCategory: false,
@@ -133,8 +136,8 @@ export class TransactionForm extends Component {
                       isLoading={this.state.isLoadingPayee}
                       onCreateOption={this.handleCreatePayee}
                       options={this.state.payees}
-                      value={this.state.payee_value}
                       placeholder="Select or create Payee"
+                      value={this.state.payee_value}
                     />
                   }
                 </FormGroup>
@@ -154,7 +157,6 @@ export class TransactionForm extends Component {
                     onCreateOption={this.handleCreateCategory}
                     options={this.state.categories}
                     value={this.state.category_value}
-                    placeholder="Select or create Category"
                   />
                 }
               </FormGroup>

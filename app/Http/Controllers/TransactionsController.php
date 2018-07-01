@@ -21,8 +21,8 @@ class TransactionsController extends Controller
             'account_id' => 'required|exists_for_user:accounts,id,user_id,' . $user_id,
             'category_id' => 'required|exists_for_user:category,id,user_id,' . $user_id,
             'payee_id' => 'required|exists_for_user:payees,id,user_id,' . $user_id,
-            'outflow' => 'required|numeric',
-            'inflow' => 'required|numeric',
+            'outflow' => 'required_without:inflow|numeric',
+            'inflow' => 'required_without:outflow|numeric',
             'date' => 'required|date'
         ]);
 
@@ -36,10 +36,15 @@ class TransactionsController extends Controller
 		$transaction->category_id = $request->category_id;
 		$transaction->payee_id = $request->payee_id;
 		$transaction->memo = $request->memo;
-		$transaction->outflow = $request->outflow;
-		$transaction->inflow = $request->inflow;
+		$transaction->outflow = $request->outflow ?: 0;
+		$transaction->inflow = $request->inflow ?: 0;
 		$transaction->date = new Carbon($request->date);
 		$transaction->save();
+
+		$account = Account::where('id', $transaction->account_id)->first();
+		$account->balance = $account->balance + $transaction->inflow - $transaction->outflow;
+		$account->save();
+
 		return Transaction::find($transaction->id);
 	}
 
@@ -51,6 +56,12 @@ class TransactionsController extends Controller
 	}
 
 	public function getAllTransactions() {
-		return Auth::user()->transactions;
+		$user = Auth::user();
+		return Transaction::with('payee')
+			->where('user_id', $user->id)
+			->where('category_id', '!=', Auth::user()->internal_category)
+			->where('payee_id', '!=', $user->internal_payee)
+			->orderBy('created_at', 'desc')
+			->get();
 	}
 }

@@ -9,8 +9,6 @@ import RegisterUser from './RegisterUser';
 export class Register extends Component {
 	constructor (props) {
         super(props);
-        console.log(this.props.access);
-        console.log(this.props.registered);
     };
 
 	render () {

@@ -17,6 +17,7 @@ class CreatePayeesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('name');
+            $table->boolean('internal')->default(false);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

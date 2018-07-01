@@ -29,8 +29,10 @@ Route::group(['prefix' => 'account', 'middleware' => 'jwt.auth'], function () {
 
 Route::group(['prefix' => 'category', 'middleware' => 'jwt.auth'], function () {
 	Route::post('create', 'CategoryController@create');
+	Route::get('calculated/{month}/{year}', 'CategoryController@getCalculatedCategories');
 	Route::get('{category}', 'CategoryController@getCategory');
-	Route::get('/', 'CategoryController@getAllCategories');	
+	Route::get('current/{month}/{year}', 'CategoryController@getCategoriesForMonth');
+	Route::get('/', 'CategoryController@getAllCategories');
 });
 
 Route::group(['prefix' => 'payee', 'middleware' => 'jwt.auth'], function () {

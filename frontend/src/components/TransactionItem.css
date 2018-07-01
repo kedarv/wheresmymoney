@@ -1,0 +1,51 @@
+.transactions-list__wrapper {
+  border: solid 1px #d4d4d5;
+  border-radius: 0.28571429rem;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: row wrap;
+      flex-flow: row wrap;
+  font-size: 1.14285714rem;
+}
+
+.transaction-item {
+  -ms-flex: 1 1 100%;
+      flex: 1 1 100%;
+  width: 100%;
+  border-bottom: dotted 1px #d4d4d5;
+  padding: 0.75em 1em;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+  -ms-flex-align: center;
+      align-items: center;
+}
+
+.transaction-item .ui.label {
+  -webkit-box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+          box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item__date {
+  -ms-flex: 1 1;
+      flex: 1 1;
+  white-space: nowrap;
+  color: #7c7c7d;
+}
+
+.transaction-item__info {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  padding-left: 0.5em;
+}
+.transaction-item__amount {
+  -ms-flex: 1 1;
+      flex: 1 1;
+  white-space: nowrap;
+  text-align: right;
+}

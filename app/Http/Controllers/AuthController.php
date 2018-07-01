@@ -30,36 +30,36 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $validator->errors();
+            return ['status' => 'validation', 'errors' => $validator->errors()];
         }
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return ['status' => 'unauthorized', 'errors' => ['The email and password combination are incorrect']];
         }
 
-        return $this->respondWithToken($token);
+        return ['status' => 'success', 'data' => $this->getToken($token)];
     }
 
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|unique:users|max:255',
+            'email' => 'required|email|unique:users|max:255',
             'password' => 'required|max:255',
             'password_confirm' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
-            return $validator->errors();
+            return ['status' => 'validation', 'errors' => $validator->errors()];
         }
 
         $user = new User;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
-
+        $user->postSignupActions();
         $token = JWTAuth::fromUser($user);
 
-        return $this->respondWithToken($token);
+        return ['status' => 'success', 'data' => $this->getToken($token)];
     } 
 
     /**
@@ -81,10 +81,15 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return response()->json($this->getToken($token));
+    }
+
+    protected function getToken($token)
+    {
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        ];
     }
 }

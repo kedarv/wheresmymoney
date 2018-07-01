@@ -34,7 +34,7 @@ class Transaction extends Model
      */
     public function payee()
     {
-        return $this->hasOne('App\Models\Payee');
+        return $this->belongsTo('App\Models\Payee');
     }
 
     /**

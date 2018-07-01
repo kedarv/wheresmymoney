@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Category;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -82,5 +83,24 @@ class User extends Authenticatable implements JWTSubject
 
     public function net_worth() {
         return $this->accounts->sum('balance');
+    }
+
+    public function postSignupActions() {
+        $category = new Category;
+        $category->user_id = $this->id;
+        $category->name = "Internal Category";
+        $category->amount = 0;
+        $category->internal = true;
+        $category->save();
+
+        $payee = new Payee;
+        $payee->user_id = $this->id;
+        $payee->name = "Internal Payee";
+        $payee->internal = true;
+        $payee->save();
+
+        $this->internal_category = $category->id;
+        $this->internal_payee = $payee->id;
+        $this->save();     
     }
 }

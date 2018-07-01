@@ -30,11 +30,11 @@ export class Login extends Component {
         }).then((res) => res.json())
             .then((json) => {
                 this.setState({ isLoading: false });
-                if (json.access_token) {
-                    this.props.onLogin(json.access_token);
+                if (json.data && json.data.access_token) {
+                    this.props.onLogin(json.data.access_token);
                     this.props.history.push('/');
                 } else {
-                        this.setState({authError:true, errors:json});
+                        this.setState({authError:true, errors:json.errors});
                     }
             })
     }

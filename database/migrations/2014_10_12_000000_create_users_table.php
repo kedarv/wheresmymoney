@@ -17,6 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('email');
             $table->string('password');
+            $table->integer('internal_category')->default(0);
+            $table->integer('internal_payee')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

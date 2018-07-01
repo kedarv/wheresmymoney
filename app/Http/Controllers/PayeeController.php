@@ -35,6 +35,6 @@ class PayeeController extends Controller
 	}
 
 	public function getAllPayees() {
-		return Auth::user()->payees;
+		return Payee::where('user_id', Auth::user()->id)->where('internal', 0)->get();
 	}
 }
