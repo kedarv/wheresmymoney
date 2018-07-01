@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTransactionsTableFK extends Migration
 {
@@ -13,8 +12,7 @@ class AlterTransactionsTableFK extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function($table)
-        {
+        Schema::table('transactions', function ($table) {
             $table->foreign('payee_id')->references('id')->on('payees');
         });
     }

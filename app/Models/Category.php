@@ -14,7 +14,7 @@ class Category extends Model
     protected $table = 'category';
 
     /**
-     * Get the user that owns the category
+     * Get the user that owns the category.
      */
     public function user()
     {
@@ -22,7 +22,7 @@ class Category extends Model
     }
 
     /**
-     * Get the transactions for the category
+     * Get the transactions for the category.
      */
     public function transactions()
     {

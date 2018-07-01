@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
-use DB;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,13 +19,12 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         // TODO: move elsewhere
-        Validator::extend('exists_for_user', function ($attribute, $value, $parameters, $validator)
-        {
+        Validator::extend('exists_for_user', function ($attribute, $value, $parameters, $validator) {
             return DB::table($parameters[0])
                 ->where($parameters[1], '=', $value)
                 ->where($parameters[2], '=', $parameters[3])
                 ->count() >= 1;
-        });        
+        });
     }
 
     /**

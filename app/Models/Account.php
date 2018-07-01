@@ -14,7 +14,7 @@ class Account extends Model
     protected $table = 'accounts';
 
     /**
-     * Get the user that owns the account
+     * Get the user that owns the account.
      */
     public function user()
     {
@@ -22,7 +22,7 @@ class Account extends Model
     }
 
     /**
-     * Get the transactions for the account
+     * Get the transactions for the account.
      */
     public function transactions()
     {

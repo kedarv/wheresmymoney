@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Models\Category;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -29,7 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'password', 'remember_token',
     ];
 
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -38,7 +37,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
-    
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
@@ -50,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the categories for the user
+     * Get the categories for the user.
      */
     public function category()
     {
@@ -58,7 +57,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the accounts for the user
+     * Get the accounts for the user.
      */
     public function accounts()
     {
@@ -66,7 +65,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the transactions for the user
+     * Get the transactions for the user.
      */
     public function transactions()
     {
@@ -74,33 +73,35 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the payees for the user
+     * Get the payees for the user.
      */
     public function payees()
     {
         return $this->hasMany('App\Models\Payee');
     }
 
-    public function net_worth() {
+    public function net_worth()
+    {
         return $this->accounts->sum('balance');
     }
 
-    public function postSignupActions() {
-        $category = new Category;
+    public function postSignupActions()
+    {
+        $category = new Category();
         $category->user_id = $this->id;
-        $category->name = "Internal Category";
+        $category->name = 'Internal Category';
         $category->amount = 0;
         $category->internal = true;
         $category->save();
 
-        $payee = new Payee;
+        $payee = new Payee();
         $payee->user_id = $this->id;
-        $payee->name = "Internal Payee";
+        $payee->name = 'Internal Payee';
         $payee->internal = true;
         $payee->save();
 
         $this->internal_category = $category->id;
         $this->internal_payee = $payee->id;
-        $this->save();     
+        $this->save();
     }
 }
