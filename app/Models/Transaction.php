@@ -14,7 +14,7 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     /**
-     * Get the account that has the transaction
+     * Get the account that has the transaction.
      */
     public function account()
     {
@@ -22,7 +22,7 @@ class Transaction extends Model
     }
 
     /**
-     * Get the user that has the transaction
+     * Get the user that has the transaction.
      */
     public function user()
     {
@@ -30,7 +30,7 @@ class Transaction extends Model
     }
 
     /**
-     * Get the payee associated with the transaction
+     * Get the payee associated with the transaction.
      */
     public function payee()
     {
@@ -38,7 +38,7 @@ class Transaction extends Model
     }
 
     /**
-     * Get the category associated with the transaction
+     * Get the category associated with the transaction.
      */
     public function category()
     {

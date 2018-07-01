@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Validator;
 use App\Models\User;
 use Hash;
+use Illuminate\Http\Request;
 use JWTAuth;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -25,7 +25,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         $validator = Validator::make($credentials, [
-            'email' => 'required|max:255',
+            'email'    => 'required|max:255',
             'password' => 'required|max:255',
         ]);
 
@@ -43,8 +43,8 @@ class AuthController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|max:255',
+            'email'            => 'required|email|unique:users|max:255',
+            'password'         => 'required|max:255',
             'password_confirm' => 'required|same:password',
         ]);
 
@@ -52,7 +52,7 @@ class AuthController extends Controller
             return ['status' => 'validation', 'errors' => $validator->errors()];
         }
 
-        $user = new User;
+        $user = new User();
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
@@ -60,7 +60,7 @@ class AuthController extends Controller
         $token = JWTAuth::fromUser($user);
 
         return ['status' => 'success', 'data' => $this->getToken($token)];
-    } 
+    }
 
     /**
      * Refresh a token.
@@ -75,7 +75,7 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -88,8 +88,8 @@ class AuthController extends Controller
     {
         return [
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
         ];
     }
 }

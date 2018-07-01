@@ -14,7 +14,7 @@ class Payee extends Model
     protected $table = 'payees';
 
     /**
-     * Get the user that has the payee
+     * Get the user that has the payee.
      */
     public function user()
     {
@@ -22,7 +22,7 @@ class Payee extends Model
     }
 
     /**
-     * Get the transaction that has the payee
+     * Get the transaction that has the payee.
      */
     public function transaction()
     {
