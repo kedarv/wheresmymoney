@@ -1,14 +1,12 @@
 import { loadCookie } from '../utils/cookies';
+import { API_BASE_URL } from '../config';
 
 export default function apiService(endpoint, options = {}) {
-	console.log(loadCookie('token'));
 	options.headers = {
 		"Authorization": "Bearer " + loadCookie('token')
 	};
-
-	const base_url = 'http://localhost/financetracker/public/api';
-
-	return fetch(`${base_url}/${endpoint}`, options);
+	console.log(API_BASE_URL);
+	return fetch(`${API_BASE_URL}/${endpoint}`, options);
 }
 
 export function linkBuilder(endpoint) {
