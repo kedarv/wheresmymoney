@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import apiService from '../actions/index.js';
 import Body from './Body';
 import TransactionForm from './TransactionForm';
+import AccountForm from './AccountForm';
 import Budget from './Budget';
-import Transactions from './Transactions';
+import RecentTransactions from './RecentTransactions';
 import { Container, Row, Col, Table, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 export default class Dashboard extends Component {
@@ -49,12 +50,14 @@ export default class Dashboard extends Component {
                         <Col lg="8" sm="12">
                             <span className="section_header">New Transaction</span>
                             <hr/>
-                            <TransactionForm/>
+                            <TransactionForm />
                         </Col>
                     </Row>
                     <Budget/>
                     <hr/>
-                    <Transactions />
+                    <RecentTransactions />
+                    <hr/>
+                    <AccountForm/>
                 </Container>
             </Body>
         );

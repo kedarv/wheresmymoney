@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'reactstrap';
 import TransactionItem from './TransactionItem';
 import styles from './TransactionItem.css';
 
-export default class Transactions extends Component {
+export default class RecentTransactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,12 +24,15 @@ export default class Transactions extends Component {
 
   render() {
     return (
+      <div>
+      <h4>RecentTransactions.js</h4>
       <div className='transactions-list__wrapper'>
         {
           this.state.transactions && this.state.transactions.map((transaction) => (
             <TransactionItem transaction={transaction}/>
           ))
     	 }
+      </div>
       </div>
     );
   }

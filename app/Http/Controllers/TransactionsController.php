@@ -21,8 +21,7 @@ class TransactionsController extends Controller
             'account_id'  => 'required|exists_for_user:accounts,id,user_id,'.$user_id,
             'category_id' => 'required|exists_for_user:category,id,user_id,'.$user_id,
             'payee_id'    => 'required|exists_for_user:payees,id,user_id,'.$user_id,
-            'outflow'     => 'required_without:inflow|numeric',
-            'inflow'      => 'required_without:outflow|numeric',
+            'amount'     => 'required|numeric',
             'date'        => 'required|date',
         ]);
 
@@ -36,8 +35,8 @@ class TransactionsController extends Controller
         $transaction->category_id = $request->category_id;
         $transaction->payee_id = $request->payee_id;
         $transaction->memo = $request->memo;
-        $transaction->outflow = $request->outflow ?: 0;
-        $transaction->inflow = $request->inflow ?: 0;
+        $transaction->outflow = ($request->amount > 0) ? $request->amount : 0;
+        $transaction->inflow = ($request->amount < 0) ? $request->amount : 0;
         $transaction->date = new Carbon($request->date);
         $transaction->save();
 

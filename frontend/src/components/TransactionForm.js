@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import apiService from '../actions/index.js';
 import { withRouter } from 'react-router-dom';
-import { Button, Form, FormGroup, Label, Input, Alert, Row, Col } from 'reactstrap';
+import { InputGroup, InputGroupAddon, Button, Form, FormGroup, Label, Input, Alert, Row, Col } from 'reactstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import Select from 'react-select';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
@@ -93,8 +93,7 @@ export class TransactionForm extends Component {
     form.append('payee_id', data.target.payee.value);
     form.append('category_id', data.target.category.value);
     form.append('account_id', data.target.account.value);
-    form.append('outflow', data.target.outflow.value);
-    form.append('inflow', data.target.inflow.value);
+    form.append('amount', data.target.amount.value.replace(/\$/g, ''));
     form.append('memo', data.target.memo.value);
     form.append('date', this.state.date);
     return apiService('transactions/create', {
@@ -115,6 +114,7 @@ export class TransactionForm extends Component {
   render () {
     return (
       <div>
+      <h4>TransactionForm.js</h4>
         <ErrorMsg errors={this.state.errors}/>
           <Form onSubmit={this.handleCreateTransaction}>
             <Row>
@@ -177,27 +177,21 @@ export class TransactionForm extends Component {
               <Row>
                 <Col md={6}>
                 <FormGroup>
-                  <Label for="inputOutflow">Outflow</Label>
-                  <Input type="text" name="outflow" id="inputOutflow" placeholder="-$Outflow" />
+                  <Label for="inputAmount">Amount</Label>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                    <Input type="text" name="amount" id="inputAmount" placeholder="5" />
+                  </InputGroup>                    
                 </FormGroup>
                 </Col>
                 <Col md={6}>
-                <FormGroup>
-                  <Label for="inputInflow">Inflow</Label>
-                  <Input type="text" name="inflow" id="inputInflow" placeholder="+$Inflow" />
-                </FormGroup>
-                </Col>
-              </Row>
- 
-                <FormGroup>
+                  <FormGroup>
                   <Label for="inputMemo">Input Memo</Label>
                   <Input type="text" name="memo" id="inputMemo" placeholder="Memo" />
-                </FormGroup>
-
-   
-                  <Button type="submit" color="primary">Save</Button>
-              
-
+                  </FormGroup>
+                </Col>
+              </Row>
+                <Button type="submit" color="primary">Save</Button>
           </Form>         
       </div>
     );
